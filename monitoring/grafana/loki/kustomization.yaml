@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - loki-rolebinding.yaml
+  - loki-serviceaccount.yaml
+  - loki-secret.yaml
+  - loki-service.yaml
+  - loki-stateful.yaml

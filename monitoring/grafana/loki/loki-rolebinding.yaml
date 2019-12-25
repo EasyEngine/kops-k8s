@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: release-name-loki
+  namespace: kube-system
+  labels:
+    app: loki
+    chart: loki-0.14.3
+    heritage: Tiller
+    release: release-name
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: release-name-loki
+subjects:
+- kind: ServiceAccount
+  name: release-name-loki
+
+
