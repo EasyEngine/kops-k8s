@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: vanguardngr-k8s-php-cron
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: "Forbid"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 20
+  startingDeadlineSeconds: 600 # 10 min
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 3600 # 60min
+      template:
+        spec:
+          containers:
+            - name: php-fpm
+              image: 859707325108.dkr.ecr.us-east-1.amazonaws.com/vanguardngr:php-cron-v1.0.2
+              volumeMounts:
+              - name: wp-config-vol
+                mountPath: "/tmp/wp-config"
+                readOnly: true
+          restartPolicy: Never
+          volumes:
+          - name: wp-config-vol
+            secret:
+              secretName: wp-config
