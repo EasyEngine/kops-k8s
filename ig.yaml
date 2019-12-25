@@ -1,0 +1,92 @@
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: dev-kops.k8s.local
+  name: nodes
+spec:
+  image: kope.io/k8s-1.12-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: t3.small
+  maxSize: 1
+  minSize: 1
+  rootVolumeSize: 50
+  nodeLabels:
+    kops.k8s.io/instancegroup: nodes
+    kubernetes.io/instancegroup: nodes
+  role: Node
+  subnets:
+  - us-east-1b
+  # - us-east-1c
+  # - us-east-1d
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2019-10-25T04:43:51Z
+  labels:
+    kops.k8s.io/cluster: dev-kops.k8s.local
+  name: test-node
+spec:
+  image: kope.io/k8s-1.12-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: t3.micro
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: test-node
+  role: Node
+  subnets:
+  - us-east-1b
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: dev-kops.k8s.local
+  name: master-us-east-1b
+spec:
+  image: kope.io/k8s-1.12-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: t3.small
+  maxSize: 1
+  minSize: 1
+  rootVolumeSize: 20
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-1b
+  role: Master
+  subnets:
+  - us-east-1b
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: dev-kops.k8s.local
+  name: master-us-east-1c
+spec:
+  image: kope.io/k8s-1.12-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: t3.small
+  maxSize: 1
+  minSize: 1
+  rootVolumeSize: 20
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-1c
+  role: Master
+  subnets:
+  - us-east-1c
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: dev-kops.k8s.local
+  name: master-us-east-1d
+spec:
+  image: kope.io/k8s-1.12-debian-stretch-amd64-hvm-ebs-2019-08-16
+  machineType: t3.small
+  maxSize: 0
+  minSize: 0
+  rootVolumeSize: 20
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-1d
+  role: Master
+  subnets:
+  - us-east-1d

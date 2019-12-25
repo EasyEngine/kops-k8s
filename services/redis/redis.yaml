@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-redis
+  labels:
+    app: wpredis
+  namespace: redis
+spec:
+  ports:
+    - port: 6379
+  selector:
+    app: wpredis
+    tier: redis
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: wordpress-redis
+  labels:
+    app: wpredis
+  namespace: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wpredis
+      tier: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wpredis
+        tier: redis
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/instancegroup
+                operator: In
+                values:
+                - nodes
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - wordpress
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - image: easyengine/k8s-redis:v1.0.0
+        ports:
+        - containerPort: 6379
+        name: redis
